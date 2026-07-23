@@ -1,0 +1,42 @@
+# ==================================================
+# BACKEND - SPRING BOOT / JAVA / MAVEN
+# ==================================================
+
+inventory-service/target/
+inventory-service/build/
+inventory-service/.gradle/
+
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+inventory-service/.mvn/timing.properties
+inventory-service/.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+logs/
+
+# ==================================================
+# FRONTEND - ANGULAR / NODE
+# ==================================================
+
+inventory-app/node_modules/
+inventory-app/dist/
+inventory-app/.angular/
+inventory-app/.cache/
+inventory-app/coverage/
+
+# Logs de gestores de paquetes
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==================================================
+# VISUAL STUDIO CODE
+# ==================================================
+
+.vscode/
