@@ -1,8 +1,12 @@
 package com.eduar.dev.inventory_service.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eduar.dev.inventory_service.dto.request.RegisterMovementRequest;
+import com.eduar.dev.inventory_service.dto.response.MovementResponse;
 import com.eduar.dev.inventory_service.dto.response.RegisterMovementReponse;
 import com.eduar.dev.inventory_service.entity.Movement;
 import com.eduar.dev.inventory_service.entity.Product;
@@ -12,6 +16,7 @@ import com.eduar.dev.inventory_service.wrapper.enums.MovementType;
 import com.eduar.dev.inventory_service.wrapper.exceptions.ProductNotFoundException;
 
 @Service
+@Transactional(readOnly = true)
 public class MovementService {
 
     private final MovementRepository movementRepository;
@@ -23,6 +28,7 @@ public class MovementService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public RegisterMovementReponse registerMovement(RegisterMovementRequest request) {
 
         Product product = productRepository.findById(request.productId()).orElseThrow(
@@ -60,6 +66,29 @@ public class MovementService {
                     newMovement.getTimestamp()
         );
 
+    }
+
+    
+    public Page<MovementResponse> findHistoryByProductId(Long productId,  Pageable pageable) {
+        
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException(
+                    "Producto no encontrado con id: " + productId
+            );
+        }
+
+        Page<Movement> movements = movementRepository.findByProduct_Id(productId, pageable);
+
+        return movements.map(movement ->
+                new MovementResponse(
+                        movement.getId(),
+                        movement.getProduct().getId(),
+                        movement.getType(),
+                        movement.getQuantity(),
+                        movement.getReason(),
+                        movement.getTimestamp()
+                )
+        );
     }
 
     
