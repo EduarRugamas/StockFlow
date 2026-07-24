@@ -3,6 +3,7 @@ package com.eduar.dev.inventory_service.entity;
 import java.math.BigDecimal;
 
 import com.eduar.dev.inventory_service.wrapper.enums.ProductCategory;
+import com.eduar.dev.inventory_service.wrapper.exceptions.InsufficientStockException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,10 +65,10 @@ public class Product {
         validateQuantity(quantity);
 
         if (this.currentStock < quantity) {
-            // throw new InsufficientStockException(
-            //         "Stock insuficiente. Disponible: " + currentStock
-            //                 + ", solicitado: " + quantity
-            // );
+            throw new InsufficientStockException(
+                    "Stock insuficiente. Disponible: " + currentStock
+                            + ", solicitado: " + quantity
+            );
         }
 
         this.currentStock -= quantity;
