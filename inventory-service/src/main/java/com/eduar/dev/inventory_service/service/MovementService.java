@@ -10,8 +10,11 @@ import com.eduar.dev.inventory_service.dto.response.MovementResponse;
 import com.eduar.dev.inventory_service.dto.response.RegisterMovementReponse;
 import com.eduar.dev.inventory_service.entity.Movement;
 import com.eduar.dev.inventory_service.entity.Product;
+import com.eduar.dev.inventory_service.entity.StockAlert;
 import com.eduar.dev.inventory_service.repository.MovementRepository;
 import com.eduar.dev.inventory_service.repository.ProductRepository;
+import com.eduar.dev.inventory_service.repository.StockAlertRepository;
+import com.eduar.dev.inventory_service.wrapper.enums.AlertSeverity;
 import com.eduar.dev.inventory_service.wrapper.enums.MovementType;
 import com.eduar.dev.inventory_service.wrapper.exceptions.ProductNotFoundException;
 
@@ -21,11 +24,13 @@ public class MovementService {
 
     private final MovementRepository movementRepository;
     private final ProductRepository productRepository;
+    private final StockAlertRepository stockAlertRepository;
 
 
-    public MovementService(MovementRepository movementRepository, ProductRepository productRepository) {
+    public MovementService(MovementRepository movementRepository, ProductRepository productRepository, StockAlertRepository stockAlertRepository) {
         this.movementRepository = movementRepository;
         this.productRepository = productRepository;
+        this.stockAlertRepository = stockAlertRepository;
     }
 
     @Transactional
@@ -35,10 +40,9 @@ public class MovementService {
                     () -> new ProductNotFoundException("Producto no encontrado con id: " + request.productId())
         );
 
-         if (request.type() == MovementType.IN) {
-            product.increaseStock(request.quantity());
-        } else {
-            product.decreaseStock(request.quantity());
+        switch (request.type()) {
+            case IN -> product.increaseStock(request.quantity());
+            case OUT -> product.decreaseStock(request.quantity());
         }
 
         Movement movement = Movement.builder()
@@ -48,12 +52,19 @@ public class MovementService {
                                 .reason(request.reason())
                                 .build();
 
-        switch (request.type()) {
-            case IN -> product.increaseStock(request.quantity());
-            case OUT -> product.decreaseStock(request.quantity());
-        }
-
+    
         Movement newMovement = movementRepository.save(movement);
+
+        if (request.type() == MovementType.OUT && product.isBelowMinimumStock()) {
+            StockAlert stockAlert = StockAlert.builder()
+                                        .productId(product.getId())
+                                        .productName(product.getName())
+                                        .currentStock(product.getCurrentStock())
+                                        .minStock(product.getMinStock())
+                                        .severity(calculateSeverity(product))
+                                        .build();
+            stockAlertRepository.save(stockAlert);
+        }
         
         return new RegisterMovementReponse(
                     newMovement.getId(), 
@@ -89,6 +100,15 @@ public class MovementService {
                         movement.getTimestamp()
                 )
         );
+    }
+
+
+    private AlertSeverity calculateSeverity(Product product) {
+        if (product.getCurrentStock() == 0) {
+            return AlertSeverity.CRITICAL;
+        }
+
+        return AlertSeverity.LOW;
     }
 
     

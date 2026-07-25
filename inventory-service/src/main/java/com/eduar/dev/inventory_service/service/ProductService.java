@@ -2,7 +2,6 @@ package com.eduar.dev.inventory_service.service;
 
 import com.eduar.dev.inventory_service.wrapper.enums.ProductCategory;
 import com.eduar.dev.inventory_service.wrapper.exceptions.GlobalException;
-import com.eduar.dev.inventory_service.wrapper.exceptions.GlobalExceptionHandler;
 import com.eduar.dev.inventory_service.wrapper.exceptions.ProductNotFoundException;
 
 import java.util.Locale;
