@@ -64,4 +64,18 @@ info:
     description: Microservicio para la gestion de productos, registrar movimientos y generar alertas del producto cuando cae por debajo de minimo del stock
     version: 0.0.1
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+    try-it-out-enabled: true
+
+  show-actuator: false
  
