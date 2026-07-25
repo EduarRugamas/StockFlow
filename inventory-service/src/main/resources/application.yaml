@@ -8,8 +8,60 @@ spring:
 
     defer-datasource-initialization: true
 
+
+  datasource:
+    url: jdbc:h2:mem:inventory_db
+    username: sa
+    password:
+    
+    #CONFIGURACIONES DE HIKARI-CP 
+    hikari:
+      pool-name: InventoryServiceHikariPool
+      
+      # Carga media: permite hasta 10 operaciones concurrentes
+      # que necesiten acceso a la base de datos.
+      maximum-pool-size:  10
+
+      # Mantiene 5 conexiones listas para responder rápidamente
+      # a una carga estable y a picos moderados.
+      minimum-idle: 5
+
+      # Evita que una petición permanezca bloqueada demasiado tiempo
+      # cuando todas las conexiones están ocupadas.
+      connection-timeout: 10000
+
+      # Libera conexiones excedentes que lleven 10 minutos
+      # sin utilizarse, respetando siempre minimum-idle.
+      idle-timeout: 600000 
+
   sql:
     init:
       mode: always
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+        - metrics
+        - info
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+  
+info:
+  app:
+    name: Inventory service
+    description: Microservicio para la gestion de productos, registrar movimientos y generar alertas del producto cuando cae por debajo de minimo del stock
+    version: 0.0.1
 
  
