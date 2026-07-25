@@ -17,12 +17,19 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findByCategory(ProductCategory category, Pageable page);
 
+    // @Query("""
+    //         SELECT product
+    //         FROM Product product
+    //         WHERE product.currentStock <= product.minStock
+    //         ORDER BY product.currentStock ASC
+    //         """)
+    // List<Product> findProductsWithLowStock();
+
     @Query("""
-            SELECT product
+            SELECT COUNT(product)
             FROM Product product
-            WHERE product.currentStock <= product.minStock
-            ORDER BY product.currentStock ASC
+            WHERE product.currentStock = 0
             """)
-    List<Product> findProductsWithLowStock();
+    long countCriticalProducts();
 
 }

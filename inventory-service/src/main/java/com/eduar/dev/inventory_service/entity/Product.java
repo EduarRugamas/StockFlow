@@ -85,4 +85,8 @@ public class Product {
             );
         }
     }
+
+    public boolean isCriticalStock() {
+        return this.currentStock == 0;
+    }
 }
