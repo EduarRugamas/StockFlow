@@ -78,4 +78,81 @@ springdoc:
     try-it-out-enabled: true
 
   show-actuator: false
+
+# Configuracion de resilience4j
+
+resilience4j:
+
+  circuitbreaker:
+    instances:
+      alertsCircuitBreaker:
+        register-health-indicator: true
+
+        # Analiza las últimas 10 llamadas.
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+
+        # Comienza a calcular fallos después de 5 llamadas.
+        minimum-number-of-calls: 5
+
+        # Abre el circuito cuando falla el 50 % de las llamadas.
+        failure-rate-threshold: 50
+
+        # Permanece abierto durante 15 segundos.
+        wait-duration-in-open-state: 15s
+
+        # En HALF_OPEN deja pasar 3 llamadas de prueba.
+        permitted-number-of-calls-in-half-open-state: 3
+
+        # Cambia automáticamente de OPEN a HALF_OPEN.
+        automatic-transition-from-open-to-half-open-enabled: true
+
+        # Excepciones consideradas fallos del acceso a datos.
+        record-exceptions:
+          - org.springframework.dao.DataAccessException
+  
+  retry:
+    instances:
+      movementRetrys:
+        # Máximo de tres ejecuciones incluyendo la llamada inicial.
+        max-attempts: 3
+
+        # Espera inicial moderada para permitir que un fallo temporal se recupere.
+        wait-duration: 500ms
+
+        # Incrementa la espera entre reintentos para evitar presionar la base.
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+
+        # Fallos técnicos temporales que pueden desaparecer al reintentar.
+        retry-exceptions:
+          - org.springframework.dao.TransientDataAccessException
+          - org.springframework.dao.QueryTimeoutException
+          - org.springframework.dao.CannotAcquireLockException
+        
+        # Errores de negocio o entrada que no se solucionan esperando.
+        ignore-exceptions:
+          - com.eduar.dev.inventory_service.wrapper.exceptions.ProductNotFoundException
+          - com.eduar.dev.inventory_service.wrapper.exceptions.InsufficientStockException
+          - java.lang.IllegalArgumentException
+
+  ratelimiter:
+    instances:
+      movementHistoryRateLimiter:
+
+      # Permite como máximo 10 consultas al historial
+      # durante cada período de renovación.
+        limit-for-period: 10
+
+      # Renueva los 10 permisos cada segundo,
+      # cumpliendo el límite solicitado de 10 peticiones por segundo.
+        limit-refresh-period: 1s
+        
+      # Si los permisos se agotaron, rechaza la petición inmediatamente
+      # para evitar acumular hilos y solicitudes esperando.
+        timeout-duration: 0s          
+      
+      
+
+
  

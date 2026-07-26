@@ -3,6 +3,7 @@ package com.eduar.dev.inventory_service.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eduar.dev.inventory_service.dto.response.StockAlertPageResponse;
 import com.eduar.dev.inventory_service.dto.response.StockAlertResponse;
 import com.eduar.dev.inventory_service.service.StockAlertService;
 import com.eduar.dev.inventory_service.wrapper.exceptions.dto.ErrorResponse;
@@ -71,7 +72,7 @@ public class StockAlertsController {
         )
     })
     @GetMapping(path = "")
-    public ResponseEntity<Page<StockAlertResponse>> getAllStockAlerts(
+    public ResponseEntity<StockAlertPageResponse> getAllStockAlerts(
          @PageableDefault(
                     size = 10,
                     sort = "id",
