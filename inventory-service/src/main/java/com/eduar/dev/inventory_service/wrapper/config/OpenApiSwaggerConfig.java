@@ -16,7 +16,7 @@ public class OpenApiSwaggerConfig {
 
 
     @Bean
-    public OpenAPI openApiSwaggerConfig() {
+    public OpenAPI openApiConfig() {
 
 
         Contact contact = new Contact()
