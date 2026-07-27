@@ -142,7 +142,7 @@ cd stockflow
 La configuración principal se encuentra en:
 
 ```text
-backend/src/main/resources/application.yml
+inventory-service/src/main/resources/application.yml
 ```
 
 El proyecto utiliza una base de datos H2 en memoria con una configuración similar a la siguiente:
@@ -195,7 +195,7 @@ Contraseña: dejar vacía
 La URL del backend se configura en:
 
 ```text
-frontend/src/environments/environment.ts
+inventory-app/src/environments/environment.ts
 ```
 
 Ejemplo:
@@ -306,7 +306,7 @@ http://localhost:4200
 
 ## Contacto
 
-**Desarrollador:** Eduar Rugamas
+**Desarrollador:** Eduardo Rugamas
 **Correo electrónico:** `juaneduardo021299@hotmail.com`
 **GitHub:** `https://github.com/EduarRugamas`
 **Repositorio:** `https://github.com/EduarRugamas/stockflow`
