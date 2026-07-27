@@ -1,0 +1,31 @@
+<div
+  class="group w-full overflow-hidden rounded-lg bg-white text-blue-600 shadow-sm"
+>
+  <!-- Contenido de la card -->
+  <div class="p-6">
+    <div class="flex items-start justify-between">
+      <div>
+        <p class="text-xl font-semibold">
+          {{title}}
+        </p>
+
+        <i [class]="icon + ' mt-4 block'" style="font-size: 2rem;"></i>
+      </div>
+
+      <span class="text-4xl font-light">
+        {{value}}
+      </span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <button type="button" class="flex w-full cursor-pointer items-center justify-between rounded-t-lg px-6 py-4 text-white" [class]="footerColor" (click)="onFooterClick()"> 
+    <span class="text-sm font-semibold">
+      {{footerText}}
+    </span>
+
+    <i
+      class="pi pi-arrow-right transition-transform duration-200 group-hover:translate-x-1"
+    ></i>
+  </button>
+</div>
