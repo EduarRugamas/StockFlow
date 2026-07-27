@@ -126,7 +126,7 @@ npm install -g @angular/cli@19
 ## Clonar el proyecto
 
 ```bash
-git clone https://github.com/EduarRugamas/stockflow.git
+git clone https://github.com/EduarRugamas/StockFlow.git
 ```
 
 Ingresar al directorio principal:
@@ -309,7 +309,7 @@ http://localhost:4200
 **Desarrollador:** Eduardo Rugamas
 **Correo electrónico:** `juaneduardo021299@hotmail.com`
 **GitHub:** `https://github.com/EduarRugamas`
-**Repositorio:** `https://github.com/EduarRugamas/stockflow`
+**Repositorio:** `https://github.com/EduarRugamas/StockFlow.git`
 
 ---
 
